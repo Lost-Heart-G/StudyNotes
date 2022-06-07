@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .box {
+        width: 350px;
+        height: 350px;
+        margin: 100px;
+        border: #ccc solid 1px;
+        position: relative;
+      }
+      .big {
+        width: 400px;
+        height: 400px;
+        position: absolute;
+        top: 0;
+        left: 360px;
+        border: #ccc solid 1px;
+        overflow: hidden;
+        display: none;
+      }
+      .big img {
+        position: absolute;
+      }
+      .mask {
+        width: 175px;
+        height: 175px;
+        background: rgba(255, 255, 0, 0.4);
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        cursor: move;
+        display: none;
+      }
+      .small {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box" id="box">
+      <div class="small">
+        <img src="../../images/兰博壁纸-small.webp" width="350" alt="" />
+
+        <div class="mask"></div>
+      </div>
+      <div class="big">
+        <img src="../../images/兰博壁纸.jpg" width="800" alt="" />
+      </div>
+    </div>
+
+    <script>
+      var box = document.getElementById("box");
+      var smallBox = box.firstElementChild;
+      console.log(smallBox);
+      var bigBox = box.lastElementChild;
+      console.log(bigBox);
+
+      var smallImage = smallBox.children[0];
+      var mask = smallBox.children[1];
+      var bigImage = bigBox.children[0];
+
+      // 1. 鼠标经过的时候 显示 mask和 bigbox，当鼠标离开box的时候隐藏mask和bigbox
+      box.onmouseover = function() {
+        // 显示 mask 和 bigBox;
+        mask.style.display = "block";
+        bigBox.style.display = "block";
+      };
+
+      box.onmouseout = function() {
+        mask.style.display = "none";
+        bigBox.style.display = "none";
+      };
+
+      // 2. 当鼠标在盒子中移动的时候，让mask和鼠标一起移动
+      box.onmousemove = function(e) {
+        e = e || window.event;
+        // 获取鼠标在盒子中的位置，就是 mask 的坐标
+        maskX = e.pageX - box.offsetLeft;
+        maskY = e.pageY - box.offsetTop;
+
+        // 让鼠标出现在mask的中心点
+        maskX = maskX - mask.offsetWidth / 2;
+        maskY = maskY - mask.offsetHeight / 2;
+
+        // 把 mask 限制在 box 中
+        maskX = maskX < 0 ? 0 : maskX;
+        maskY = maskY < 0 ? 0 : maskY;
+
+        maskX =
+          maskX > box.offsetWidth - mask.offsetWidth
+            ? box.offsetWidth - mask.offsetWidth
+            : maskX;
+        maskY =
+          maskY > box.offsetHeight - mask.offsetHeight
+            ? box.offsetHeight - mask.offsetHeight
+            : maskY;
+
+        mask.style.left = maskX + "px";
+        mask.style.top = maskY + "px";
+
+        // 3. 当mask 移动的时候，让大图片移动
+        // 求大图片的移动的距离
+
+        // mask移动的距离 / mask最大能够移动的距离 = 大图片移动的距离 / 大图片最大能够移动的距离
+
+        // mask最大能够移动的距离
+        var maskMax = box.offsetWidth - mask.offsetWidth;
+        // 大图片最大能够移动的距离
+        var bigImageMax = bigImage.offsetWidth - bigBox.offsetWidth;
+
+        var bigImageX = (maskX * bigImageMax) / maskMax;
+        var bigImageY = (maskY * bigImageMax) / maskMax;
+
+        bigImage.style.left = -bigImageX + "px";
+        bigImage.style.left = -bigImageY + "px";
+      };
+    </script>
+  </body>
+</html>

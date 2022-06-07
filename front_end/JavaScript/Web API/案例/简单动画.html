@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      body {
+        margin: 0;
+      }
+      #box {
+        position: relative;
+        background-color: red;
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="button" value="开始" id="btn" />
+    <div id="box"></div>
+
+    <script>
+      // 1. 点击按钮，让盒子能够向右移动
+      var btn = document.getElementById("btn");
+      var box = document.getElementById("box");
+      
+      btn.onclick = function() {
+        animate(box, 800);
+      };
+
+	  var timerId = null;
+      function animate(element, target) {
+        // style.left 获取的标签中的style 属性设置的样式属性的值
+        // 如果标签中的 style 没有设置该样式属性，我们获取到的是空字符串
+        // box.style.left = box.style.left + 10 + "px";
+
+        // 获取盒子当前的位置  offsetLeft offsetTop
+        // box.style.left = box.offsetLeft + 10 + 'px';
+        // 2. 让盒子不停的向右移动
+
+        // 通过判断，保证页面上只有一个定时器在执行动画
+        if (timerId) {
+          clearInterval(timerId);
+          timerId = null;
+        }
+
+        timerId = setInterval(function() {
+          // 让盒子停在500px的位置
+          // 判断盒子当前位置是否到达500
+          // 最终停止的像素
+          // 步长
+          var step = 6;
+		  // 获取当前盒子的位置 
+		  var current = element.offsetLeft;
+          if (current >= target) {
+            // 停止定时器
+            clearInterval(timeId);
+            element.style.left = target + "px";
+            // 退出函数
+            return;
+          }
+		  // 移动盒子
+		  current += step;
+          element.style.left = current + step + "px";
+        }, 30);
+      }
+    </script>
+  </body>
+</html>

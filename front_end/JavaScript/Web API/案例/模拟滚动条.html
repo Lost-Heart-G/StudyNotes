@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title>模拟滚动条</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .box {
+        width: 300px;
+        height: 500px;
+        border: 1px solid red;
+        margin: 100px;
+        position: relative;
+        overflow: hidden;
+
+        /* 不让文字选中 */
+        -webkit-user-select: none;
+        -moze-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+      .content {
+        padding: 5px 18px 5px 5px;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+      .scroll {
+        width: 18px;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
+        background-color: #eee;
+      }
+      .bar {
+        height: 100px;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: red;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box" id="box">
+      <div class="content" id="content">
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+        我是文字内容，我是文字内容，我是文字内容，
+      </div>
+      <div class="scroll" id="scroll">
+        <div class="bar" id="bar"></div>
+      </div>
+    </div>
+    <script>
+      var box = document.getElementById('box');
+      var content = document.getElementById('content');
+      var scroll = document.getElementById('scroll');
+      var bar = document.getElementById('bar');
+      // 1. 根据内容大小，计算滚动条的高度
+      // 滚动条的高度 / scroll的高度 = box的高度 / 内容的高度
+
+      // 当内容的高度大于box的高度，再计算滚动条的高度，否则的话滚动条的高度为0
+
+      var barHeight = 0;
+      if (content.scrollHeight > box.clientHeight) {
+      	barHeight = box.clientHeight / content.scrollHeight * scroll.clientHeight;
+      }
+      bar.style.height = barHeight + 'px';
+
+      // 2. 让滚动条能够拖拽
+        // 2.1 挡鼠板按下的时候， 求鼠标在滚动条的位置
+      bar.onmousedown = function (e) {
+      	e = e || window.event;
+      	// 鼠标在滚动条中的位置
+      	var Y = e.pageY - box.offsetTop - bar.offsetTop;
+      	// 2.2 当鼠标在页面上移动的时候，求滚动条的位置
+      	document.onmousemove = function(e) {
+      		var barY = e.pageY - Y - box.offsetTop;
+      		// 控制 bar 不能移出scroll
+      		barY = barY < 0 ? 0 : barY;
+      		barY = barY > scroll.clientHeight - bar.clientHeight ? scroll.clientHeight - bar.clientHeight : barY;
+
+      		bar.style.top = barY + 'px';
+          // 3. 当拖拽滚动条的时候，改变内容的位置
+          // 内容滚动的距离 / 内容最大能够滚动的距离  = 滚动条滚动的距离 / 滚动条最大能够滚动的距离
+          
+          // 内容最大能够滚动的距离
+          var contentMax  = content.scrollHeight - box.clientHeight;
+          // 滚动条最大能够滚动的距离
+          var barMax = scroll.clientHeight - bar.clientHeight;
+          
+          var contentY = barY / barMax * contentMax;
+          content.style.top = -contentY + 'px';
+      	}
+      }
+      document.onmouseup = function () {
+      	// 移除鼠标移动的时间
+      	document.onmousemove = null;
+      }
+      // 3. 当拖拽滚动条的时候，改变内容的位置
+    </script>
+  </body>
+</html>
